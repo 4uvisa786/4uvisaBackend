@@ -12,6 +12,7 @@ import airBookingRoutes from "./routes/airBookingRoutes.js";
 import requestRoutes from "./routes//requestRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
+import uiRoutes from "./routes/uiRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -42,6 +43,7 @@ app.use("/api/services", serviceRoutes);
 app.use("/api/air-bookings", airBookingRoutes);
 app.use("/api/requests", requestRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/ui", uiRoutes);
 
 app.use("/api/files", uploadRoutes);
 
