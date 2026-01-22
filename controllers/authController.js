@@ -31,11 +31,20 @@ export const register = async (req, res) => {
       });
     }
 
-    const exists = await User.findOne({ email });
-    if (exists)
-      return res
-        .status(409)
-        .json({ success: false, message: "Email already used" });
+    // 🔹 Check email OR phone
+    const exists = await User.findOne({
+      $or: [{ email }, { phone }],
+    });
+
+    if (exists) {
+      return res.status(409).json({
+        success: false,
+        message:
+          exists.email === email
+            ? "Email already used"
+            : "Phone number already used",
+      });
+    }
 
     const user = new User({
       firstName,
@@ -54,11 +63,11 @@ export const register = async (req, res) => {
       "Your account has been created successfully."
     );
 
-    await sendEmail({
-      to: email,
-      subject: "Registration Successful",
-      html: `<p>Hello ${firstName}, your account is created successfully.</p>`,
-    });
+    // await sendEmail({
+    //   to: email,
+    //   subject: "Registration Successful",
+    //   html: `<p>Hello ${firstName}, your account is created successfully.</p>`,
+    // });
 
     await logAudit(user._id, "register", "User", user._id);
 
